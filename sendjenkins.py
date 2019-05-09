@@ -43,7 +43,7 @@ def send_msg(content, to_user, to_party, to_tag, application_id, safe):
 
 def get_buidl_info(job_name):
 
-    server = jenkins.Jenkins('http://10.254.135.113:8085/',username='qtqky',password='Ghyfv#%5896')
+    server = jenkins.Jenkins('url',username='',password='')
     jobInfo = server.get_job_info(job_name)
 
     lastBuildNumber = server.get_job_info(job_name)['lastBuild']['number']
