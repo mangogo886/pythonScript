@@ -23,11 +23,12 @@ for grpName in section:
     opts=cf.get(grpName,'app')
     tomcatList=opts.split(',')
     for tomcat in tomcatList:
-	    tomcatName="cmdline="+tomcat
+        tomcatName="cmdline="+tomcat
             
         insertStrategy='INSERT INTO `falcon_portal`.`strategy`( `metric`, `tags`, `max_step`, `priority`, `func`, `op`, `right_value`,  `tpl_id`) VALUES ( "proc.num", "%s", 10, 0, "all(#3)", "!=", "1", "%s");'%(tomcatName,TplId[0])
         cursor.execute(insertStrategy)
         con.commit()
+        print "成功添加进程 %s 到模板 %s"%(tomcat,grpName)
 
 cursor.close()
 con.close()
