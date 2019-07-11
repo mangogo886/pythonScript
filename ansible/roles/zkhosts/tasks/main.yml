@@ -1,0 +1,9 @@
+---
+- name: add-zkhost
+  remote_user: root
+  become: true
+  become_method: sudo
+  lineinfile: 
+        dest: /etc/hosts
+        insertbefore: '^# The following'
+        line: '195.18.20.22 mc.zk.thinkjoy.cn'

@@ -1,0 +1,29 @@
+#采集tomcat catalina.out端的配置
+input{
+        file{
+                path =>"/data/tomcat-7.0.69-qky-kpx/logs/catalina.out"   #日志文件路径
+                type => "159.100-kpx-tomcat"     #这个值可随意定义。用于搜索
+        }
+}
+
+
+
+filter {
+    grok {
+        match => [ "message","(?m)\s*%{TIMESTAMP_ISO8601:time}\s+(?<Level>(\S+)).*"]  #这个用来排序日志的时间，相当重要。照抄吧，暂时未睇得明白
+     }
+     date {
+        match => ["time", "yyyy-MM-dd HH:mm:ss,SSS"]
+    }
+
+}
+
+output{
+        redis{
+                host => "10.136.49.15"  #先把日志输出到redis
+                port => 6379
+                db => 2
+                data_type => "list"  #定义输出到redis的数据类型
+                key => "159-kpx"  #定义存放数据到redis的key
+        }
+}

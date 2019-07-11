@@ -1,0 +1,6 @@
+---
+- name: add-data
+  remote_user: root
+  become: true
+  become_method: sudo
+  file: path=/data owner=ubuntu group=ubuntu state=directory

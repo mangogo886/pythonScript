@@ -1,0 +1,10 @@
+---
+- hosts: all
+  remote_user: root
+  become_user: root
+  become: true
+  become_method: sudo
+  roles:
+  - addData
+  - zkhosts
+  - jdk

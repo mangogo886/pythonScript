@@ -1,0 +1,22 @@
+﻿#服务端的 logstash
+#如果没有使用消息中间件。比如没有使用redis，那个服务端不需要有logstash，客户端的logstash直接output给elasticsearch，
+#但是这里用到了redis，由于客户端的logstash是output给redis,所以这里服务端的logstash需要从redis取数据出来，
+#logstash同一个服务器可以启动多个实例。具体命令如下
+#./logstash/runner.rb -f config/159.kpx.conf --path.data=/data/logstash-5.6.5/config/data/kpx  必须要指定--path.data。用于存不放不同实例的数据
+input {
+   redis {
+      host => "10.136.49.15"   #从redis取数
+      port => 6379
+      db => 2
+      type => "159.100-kpx-tomcat"
+      data_type => "list"
+      key => "159-kpx"  #这个key。必须跟客户端logstash配置的key相同。否则可能出现取数问题
+   }
+}
+
+output {
+   elasticsearch {
+      hosts => ["127.0.0.1:9200"]   #把数据传给elasticsearch
+      index => "logstash-159kpx"  #定义一个索引。kibana就是用这个索引搜索数据
+   }
+}

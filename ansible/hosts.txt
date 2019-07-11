@@ -1,0 +1,2 @@
+[test]
+195.18.20.31  ansible_ssh_user=ubuntu ansible_ssh_pass= ansible_sudo_pass=
