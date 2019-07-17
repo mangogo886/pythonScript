@@ -12,7 +12,7 @@ cf=ConfigParser.ConfigParser()
 cf.read(configPath)
 section = cf.sections()
 
-con=MySQLdb.connect(host="10.137.215.45",user="openFalcon",passwd="Daef=596",db="falcon_portal",charset="utf8")
+con=MySQLdb.connect(host="",user="openFalcon",passwd="Daef=596",db="falcon_portal",charset="utf8")
 cursor=con.cursor()
 
 for grpName in section:
