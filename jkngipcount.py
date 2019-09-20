@@ -8,7 +8,6 @@ import sys
 import time
 import paramiko
 import os
-
 reload(sys)
 sys.setdefaultencoding('utf8')
 
@@ -54,10 +53,13 @@ def ipcount():
     cmd='/data/ops/script/jkngip.sh'
     stdin,stdout,stderr=ssh.exec_command(cmd)
     Results=stdout.readlines()
-    count=str(Results[0]+Results[1]+Results[2]).strip()
+    print Results
     n=int(Results[0].strip().split()[0])
     if n>100:
-        content=count
+        for i in range(len(Results)):
+            a=Results[i]+Results[i-1]
+        print type(a)
+        content=a
         get_token(corp_id, secret)
         send_msg(content, to_user, to_party, to_tag, application_id, safe)
     ssh.close()
