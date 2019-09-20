@@ -53,12 +53,10 @@ def ipcount():
     cmd='/data/ops/script/jkngip.sh'
     stdin,stdout,stderr=ssh.exec_command(cmd)
     Results=stdout.readlines()
-    print Results
     n=int(Results[0].strip().split()[0])
     if n>100:
         for i in range(len(Results)):
-            a=Results[i]+Results[i-1]
-        print type(a)
+            a=Results[i-1]+Results[i]
         content=a
         get_token(corp_id, secret)
         send_msg(content, to_user, to_party, to_tag, application_id, safe)
