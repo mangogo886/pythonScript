@@ -16,9 +16,9 @@ def readzk():
     date=time.strftime('%Y%m%d',time.localtime())
     database="qky_ops"
     back="/data/ops/script/zk"
-    os.system("/usr/bin/mysqldump -h   -u -p %s >%s/qky_ops%s.dump"%(database,back,date))
+    os.system("/usr/bin/mysqldump -h   -uopszk -pzk89536 %s >%s/qky_ops%s.dump"%(database,back,date))
     
-    con=MySQLdb.connect(host='',user='',passwd='',db='qky_ops',charset="utf8")
+    con=MySQLdb.connect(host='',user='opszk',passwd='zk89536',db='qky_ops',charset="utf8")
     cursor=con.cursor()
     delsql="delete  FROM cm_zk_node  where zk_id=1001 and path like '/configs/qky%';"
     cursor.execute(delsql)
@@ -44,11 +44,12 @@ def readzk():
                 insertsql="INSERT INTO qky_ops.cm_zk_node(`app_code`, `path`, `content`, `zk_id`, `is_sync`, `deleted`, `update_user`) VALUES ( '%s', '%s', '%s', '1001', 0, 0,'zhumin');"%(chil,four,data)
                 cursor.execute(insertsql)
                 con.commit()
-                     
+    delsql2="delete  FROM cm_zk_node where content='None' and zk_id=1001;" 
+    cursor.execute(delsql2)
+    con.commit() 
+
     cursor.close()
     con.close()
 
     zk.stop()
-
-
 readzk()
