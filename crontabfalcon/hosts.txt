@@ -1,0 +1,2 @@
+[all]
+app01 ansible_ssh_user=ubuntu ansible_ssh_pass= ansible_sudo_pass=
