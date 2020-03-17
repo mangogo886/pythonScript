@@ -6,9 +6,9 @@ import os
 import MySQLdb
 
 
-host = ''
-user = ''
-passwd = ''
+host = '127.0.0.1'
+user = 'admin'
+passwd = 'qt4Ky##30'
 path = 'dbname'
 
 f=open(path,'r')
@@ -16,5 +16,5 @@ f=open(path,'r')
 for i in f.readlines():
     name = i.strip()
     os.system("/usr/bin/mysql -h %s -u%s -p%s %s <%s.dump"%(host,user,passwd,name,name))
-    print ename+" imported"
+    print name+" imported"
 
