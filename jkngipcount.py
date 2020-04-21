@@ -4,7 +4,7 @@
 import urllib2
 import json
 import sys
-
+import requests
 import time
 import paramiko
 import os
@@ -44,22 +44,33 @@ def send_msg(content, to_user, to_party, to_tag, application_id, safe):
 def ipcount():
               
     hostname='ysx1'
-    username=''
+    username='zjyw'
     ssh=paramiko.SSHClient()
     ssh.load_system_host_keys()
-    privatekey=os.path.expanduser('/home//.ssh/id_rsa')
+    privatekey=os.path.expanduser('/home/zjyw/.ssh/id_rsa')
     key=paramiko.RSAKey.from_private_key_file(privatekey)
     ssh.connect(hostname=hostname,username=username,pkey=key)
     cmd='/data/ops/script/jkngip.sh'
     stdin,stdout,stderr=ssh.exec_command(cmd)
     Results=stdout.readlines()
-    n=int(Results[0].strip().split()[0])
-    if n>100:
-        for i in range(len(Results)):
-            a=Results[i-1]+Results[i]
-        content=a
+    content=""
+    if len(Results):
+        for i in Results:
+            ips=i.strip().encode().split()
+            if int(ips[0])>=100:
+                url1="http://ip-api.com/json/"
+                url2="?lang=zh-CN"
+                url=url1+ips[1]+url2
+                response=requests.get(url)
+                data=response.text
+                city=json.loads(data)['city'].encode('utf-8')
+                country=json.loads(data)['country'].encode('utf-8')
+                isp=json.loads(data)['isp'].encode('utf-8')
+                content=content+ips[0]+": "+ips[1]+country+city+isp+"\n"
         get_token(corp_id, secret)
         send_msg(content, to_user, to_party, to_tag, application_id, safe)
+    else:
+        print "not ip list..."
     ssh.close()
 
 if __name__=='__main__':
@@ -70,4 +81,5 @@ if __name__=='__main__':
     to_tag='@all'
     application_id='1'
     safe='0'
+    api_url = "http://ip.taobao.com/service/getIpInfo.php"
     ipcount()
