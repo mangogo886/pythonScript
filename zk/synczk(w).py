@@ -32,6 +32,7 @@ def sys_zk():
             cursor.execute(update_sql)
             con.commit()
         print "更新配置完成，总共更新记录%s 条"%mark_list[0][0]
+		zk.stop()
     cursor.close()
     con.close()
 
