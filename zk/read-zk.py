@@ -11,14 +11,16 @@ reload(sys)
 sys.setdefaultencoding('utf8')
 
 def readzk():
-    #date=time.strftime('%Y%m%d',time.localtime())
+    date=time.strftime('%Y%m%d',time.localtime())
     database="qky_ops"
-    con=MySQLdb.connect(host='10.10.200.11',user='admin',passwd='',db='qky_ops',charset="utf8")
+    con=MySQLdb.connect(host='',user='',passwd='',db='qky_ops',charset="utf8")
     cursor=con.cursor()
+	backtable="create table zk_node%s as select * from zk_node;"%date
     delesql="delete from qky_ops.zk_node where path like '/configs%' or path like '/startconfigs%'"
+	cursor.execute(backtable)
     cursor.execute(delesql)
     con.commit()
-    zk_hosts="10.10.200.11:2181"
+    zk_hosts=":2181"
     
     zk=KazooClient(zk_hosts)
     zk.start()
@@ -41,9 +43,12 @@ def readzk():
                         for fourthnode in fourthnodes:
                             lastnode=os.path.join(thirdnodes,fourthnode)
                             data2,stat=zk.get(lastnode)
-                            insertsql2="INSERT INTO qky_ops.zk_node(appCode,path,content) values('%s','%s','%s');"%(secondestnode,lastnode,data2)
-                            cursor.execute(insertsql2)
-                            con.commit()
+                            try:
+                                insertsql2="INSERT INTO qky_ops.zk_node(appCode,path,content) values('%s','%s','%s');"%(secondestnode,lastnode,data2)
+                                cursor.execute(insertsql2)
+                                con.commit()
+                            except Exception,e:
+                                print insertsql2
                             
     else:
         print "null"
@@ -65,14 +70,20 @@ def readzk():
                                 for sixthdynode in sixthdynodes:
                                     seventhdynodes=os.path.join(fifthdyndodes,sixthdynode)
                                     data1,stat1=zk.get(seventhdynodes)
-                                    insertsql1="INSERT INTO qky_ops.zk_node(appCode,path,content) values('%s','%s','%s');"%(secondestdynodena,seventhdynodes,data1)
-                                    cursor.execute(insertsql1)
-                                    con.commit()
+                                    try:
+                                        insertsql1="INSERT INTO qky_ops.zk_node(appCode,path,content) values('%s','%s','%s');"%(secondestdynodena,seventhdynodes,data1)
+                                        cursor.execute(insertsql1)
+                                        con.commit()
+                                    except Exception,e:
+                                        print insertsql1
                             else:
                                 data,stat=zk.get(fifthdyndodes)
-                                insertsql="INSERT INTO qky_ops.zk_node(appCode,path,content) values('%s','%s','%s');"%(secondestdynodena,fifthdyndodes,data)
-                                cursor.execute(insertsql)
-                                con.commit()
+                                try:
+                                    insertsql="INSERT INTO qky_ops.zk_node(appCode,path,content) values('%s','%s','%s');"%(secondestdynodena,fifthdyndodes,data)
+                                    cursor.execute(insertsql)
+                                    con.commit()
+                                except Exception,e:
+                                        print insertsql
     zk.stop()
     cursor.close()
     con.close()
