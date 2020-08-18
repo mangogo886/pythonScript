@@ -44,10 +44,10 @@ def send_msg(content, to_user, to_party, to_tag, application_id, safe):
 def ipcount():
               
     hostname='ysx1'
-    username='zjyw'
+    username='...'
     ssh=paramiko.SSHClient()
     ssh.load_system_host_keys()
-    privatekey=os.path.expanduser('/home/zjyw/.ssh/id_rsa')
+    privatekey=os.path.expanduser('/.../.../.ssh/id_rsa')
     key=paramiko.RSAKey.from_private_key_file(privatekey)
     ssh.connect(hostname=hostname,username=username,pkey=key)
     cmd='/data/ops/script/jkngip.sh'
