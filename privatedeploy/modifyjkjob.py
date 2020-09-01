@@ -87,6 +87,84 @@ def rpcwritexml():
                 print jobspathrpc,"job文件不存在"
 
 
+#--------------------------修改command部分。根据需要启用，默认不跑以下函数--------------------
+
+#修改前端command
+def modifycommandfe():
+    old=raw_input("输入原内容: ")
+    new=raw_input("输入替换后内容: ")
+    for dirpath in frontendpath:
+        filepath=dirpath+configfile
+        if os.path.exists(filepath):
+            tree = ET.parse(filepath)
+            root = tree.getroot()
+            command=root.find('buildWrappers').find('jenkins.plugins.publish__over__ssh.BapSshPostBuildWrapper').find('postBuild').find('delegate').find('publishers').find('jenkins.plugins.publish__over__ssh.BapSshPublisher').find('transfers').find('jenkins.plugins.publish__over__ssh.BapSshTransfer').find('execCommand')
+            newcommand=command.text.replace(old,new)
+            command.text=newcommand
+            tree.write(filepath)
+            print "%s 替换 %s %s"%(new,old,filepath)
+
+
+#修改H5端command
+def modifycommandh5():
+    old=raw_input("输入原内容: ")
+    new=raw_input("输入替换后内容: ")
+    for dirpath in h5path:
+        filepath=dirpath+configfile
+        if os.path.exists(filepath):
+            tree = ET.parse(filepath)
+            root = tree.getroot()
+            command=root.find('buildWrappers').find('jenkins.plugins.publish__over__ssh.BapSshPostBuildWrapper').find('postBuild').find('delegate').find('publishers').find('jenkins.plugins.publish__over__ssh.BapSshPublisher').find('transfers').find('jenkins.plugins.publish__over__ssh.BapSshTransfer').find('execCommand')
+            newcommand=command.text.replace(old,new)
+            command.text=newcommand
+            tree.write(filepath)
+            print "%s 替换 %s %s"%(new,old,filepath)
+
+
+
+#修改后端command
+def modifycommandbe():
+    old=raw_input("输入原内容: ")
+    new=raw_input("输入替换后内容: ")
+    cf=ConfigParser.ConfigParser()
+    cf.read(configPath)
+    hostlist=cf.sections()
+    for host in hostlist:
+        applist=cf.get(host,'app').split(',')
+        for ap in applist:
+            #拼接后端config.xml，并判断
+            jobspathbe=commondir+ap+bksuffix+"/"+configfile
+            if os.path.exists(jobspathbe):
+                tree = ET.parse(jobspathbe)
+                root = tree.getroot()
+                command=root.find('buildWrappers').find('jenkins.plugins.publish__over__ssh.BapSshPostBuildWrapper').find('postBuild').find('delegate').find('publishers').find('jenkins.plugins.publish__over__ssh.BapSshPublisher').find('transfers').find('jenkins.plugins.publish__over__ssh.BapSshTransfer').find('execCommand')
+                newcommand=command.text.replace(old,new)
+                command.text=newcommand
+                tree.write(jobspathbe)
+                print "%s 替换 %s %s"%(new,old,jobspathbe)
+
+
+#修改RPC的command
+def modifycommandrpc():
+    old=raw_input("输入原内容: ")
+    new=raw_input("输入替换后内容: ")
+    cf=ConfigParser.ConfigParser()
+    cf.read(configPath)
+    hostlist=cf.sections()
+    for host in hostlist:
+        applist=cf.get(host,'app').split(',')
+        for ap in applist:
+            #拼接RPC的config.xml，并判断
+            jobspathrpc=commondir+ap+rpcsuffix+"/"+configfile
+            if os.path.exists(jobspathrpc):
+                tree = ET.parse(jobspathrpc)
+                root = tree.getroot()
+                command=root.find('buildWrappers').find('jenkins.plugins.publish__over__ssh.BapSshPostBuildWrapper').find('postBuild').find('delegate').find('publishers').find('jenkins.plugins.publish__over__ssh.BapSshPublisher').find('transfers').find('jenkins.plugins.publish__over__ssh.BapSshTransfer').find('execCommand')
+                newcommand=command.text.replace(old,new)
+                command.text=newcommand
+                tree.write(jobspathrpc)
+                print "%s 替换 %s %s"%(new,old,jobspathrpc)
+
 
 
 
@@ -105,3 +183,12 @@ if __name__=="__main__":
     h5writexml()
     bewritexml()
     rpcwritexml()
+    
+    #---默认不跑以下函数----
+  #  modifycommandfe()
+  #  modifycommandh5()
+  #  modifycommandbe()
+   # modifycommandbe()
+    
+    
+    
