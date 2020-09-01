@@ -10,6 +10,18 @@ import ConfigParser
 
 
 
+def readxml():
+    for dirpath in frontendpath:
+        filepath=dirpath+configfile
+        if os.path.exists(filepath):
+            tree = ET.parse(filepath)
+            root = tree.getroot()
+            host=root.find('buildWrappers').find('jenkins.plugins.publish__over__ssh.BapSshPostBuildWrapper').find('postBuild').find('delegate').find('publishers').find('jenkins.plugins.publish__over__ssh.BapSshPublisher').find('configName').text
+            command=root.find('buildWrappers').find('jenkins.plugins.publish__over__ssh.BapSshPostBuildWrapper').find('postBuild').find('delegate').find('publishers').find('jenkins.plugins.publish__over__ssh.BapSshPublisher').find('transfers').find('jenkins.plugins.publish__over__ssh.BapSshTransfer').find('execCommand').text
+            print "部署应用-----",dirpath
+            print "部署主机-----",host
+            print "部署命令-----",command
+
 #前端
 def fewritexml():
     for dirpath in frontendpath:
@@ -22,8 +34,10 @@ def fewritexml():
 
             host.text=fehost
             tree.write(filepath)
-            print "修改PC前端job ",filepath,"部署主机为 ",fehost
-
+            print "修改前端job ",filepath,"部署主机为 ",fehost
+            #print "部署应用-----",dirpath
+            #print "部署主机-----",root.find('buildWrappers').find('jenkins.plugins.publish__over__ssh.BapSshPostBuildWrapper').find('postBuild').find('delegate').find('publishers').find('jenkins.plugins.publish__over__ssh.BapSshPublisher').find('configName').text
+            #print "部署命令-----",command
 
 
 #h5
@@ -38,12 +52,14 @@ def h5writexml():
 
             host.text=fehost
             tree.write(filepath)
-            print "修改h5前端job ",filepath,"部署主机为 ",fehost
+            print "修改前端job ",filepath,"部署主机为 ",fehost
+            #print "部署应用-----",dirpath
+            #print "部署主机-----",root.find('buildWrappers').find('jenkins.plugins.publish__over__ssh.BapSshPostBuildWrapper').find('postBuild').find('delegate').find('publishers').find('jenkins.plugins.publish__over__ssh.BapSshPublisher').find('configName').text
+            #print "部署命令-----",command
 
 
 
-
-#后端
+#后端和rpc
 def bewritexml():
     cf=ConfigParser.ConfigParser()
     cf.read(configPath)
@@ -58,35 +74,21 @@ def bewritexml():
                 root = tree.getroot()
                 hostname=root.find('buildWrappers').find('jenkins.plugins.publish__over__ssh.BapSshPostBuildWrapper').find('postBuild').find('delegate').find('publishers').find('jenkins.plugins.publish__over__ssh.BapSshPublisher').find('configName')
                 hostname.text=host
-                print hostname.text
                 tree.write(jobspathbe)
-                print "修改jobs %s 文件 "%(ap+bksuffix),jobspathbe,"部署主机为 ",host
+                print "修改jobs文件 ",jobspathbe,"部署主机为 ",host
 
             else:
                 print jobspathbe,"job文件不存在"
 
-
-#RPC
-def rpcwritexml():
-    cf=ConfigParser.ConfigParser()
-    cf.read(configPath)
-    hostlist=cf.sections()
-    for host in hostlist:
-        applist=cf.get(host,'app').split(',')
-        for ap in applist:
-            #拼接RPC的config.xml，并判断
+            #拼接service config.xml，并判断
             jobspathrpc=commondir+ap+rpcsuffix+"/"+configfile
             if os.path.exists(jobspathrpc):
-                tree = ET.parse(jobspathrpc)
-                root = tree.getroot()
                 hostname=root.find('buildWrappers').find('jenkins.plugins.publish__over__ssh.BapSshPostBuildWrapper').find('postBuild').find('delegate').find('publishers').find('jenkins.plugins.publish__over__ssh.BapSshPublisher').find('configName')
                 hostname.text=host
                 tree.write(jobspathrpc)
-                print "修改jobs %s 文件 "%(ap+rpcsuffix),jobspathrpc,"部署主机为 ",host
+                print "修改jobs文件 ",jobspathrpc,"部署主机为 ",host
             else:
                 print jobspathrpc,"job文件不存在"
-
-
 
 
 
@@ -101,7 +103,7 @@ if __name__=="__main__":
     configPath="config.ini"
     fehost="ng01"
 
+   # readxml()
     fewritexml()
-    h5writexml()
     bewritexml()
-    rpcwritexml()
+    h5writexml()
