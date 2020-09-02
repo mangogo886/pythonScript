@@ -13,7 +13,7 @@ import time
 
 
 
-#执行批量构G建函数
+#执行批量构建函数
 def buildjob():
     cf=ConfigParser.ConfigParser()
     cf.read(configPath)
