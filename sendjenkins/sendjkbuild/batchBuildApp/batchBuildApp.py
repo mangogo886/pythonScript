@@ -7,47 +7,11 @@ import sys
 import jenkins
 import time
 import ConfigParser
+sys.path.append("/data/ops/scripts/sendjkbuild")
+from common.chinaName import * 
 reload(sys)
 sys.setdefaultencoding( "utf-8" )
 
-
-def envname(list):
-    if list=="hw":
-        name="华为云"
-    elif list=="nsfz":
-        name="南师附中"
-    elif list=="xxzx":
-        name="湘西中学"
-    elif list=="xxxx":
-        name="湘西小学"
-    elif list=="xxyey":
-        name="湘西幼儿园"
-
-    elif list=="gm":
-        name="高密中学"
-    elif list=="gm":
-        name="高密中学"
-    elif list=="rq":
-        name="瑞泉中学"
-    elif list=="wnzx":
-        name="渭南中学"
-    elif list=="hsxx":
-        name="护士学校"
-    elif list=="snzx":
-        name="思南中学"
-
-    elif list=="zsys":
-        name="中山一中"
-    elif list=="gzjl":
-        name="广州金隆"
-    elif list=="sdlj":
-        name="顺德九江"
-    elif list=="xa30":
-        name="西安30中"
-    else:
-        name="没有匹配名字"    
-
-    return name
 
 def buildjob():
     envlist=deployenv.split(",")
@@ -87,12 +51,10 @@ def buildjob():
 
                     console = server.get_build_console_output(jobName, lastBuildNumber)
                     print console
-                    # 设置输出字体蓝色
                     print ("\033[1;34m %s %s 构建成功..... \033[0m"%(listname,jobName))
             else:
                 print("\033[1;31m %s %s 不存在\033[0m"%(listname,jobName))
         except Exception, e:
-            #设置输出字体红色
             print("\033[1;31m %s %s 登录失败.....\033[0m"%(listname,jkurl))
 
 if __name__=='__main__':
@@ -104,6 +66,6 @@ if __name__=='__main__':
     jobName = sys.argv[2]
     # 构建版本号
     version = sys.argv[3]
-    confurl = "/data/ops/scripts/sendjkbuild/batchBuildApp/urls.ini"
+    confurl = "/data/ops/scripts/sendjkbuild/common/urls.ini"
     param_dict = {"commit_version": version}
     buildjob()
