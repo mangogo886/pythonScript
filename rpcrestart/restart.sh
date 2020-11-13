@@ -11,4 +11,4 @@ if [  -n "$P_ID" ];then
     echo "kill $P_ID"
 fi
 
-nohup /usr/lib/jvm/java-1.7.0/bin/java -Xms1024m -Xmx1024m  -jar $jar >logs/nohup.out 2>&1 & echo "ok"
+nohup /usr/local/jdk1.7.0_80/bin/java -Xms1024m -Xmx1024m  -jar $jar >>logs/nohup.out 2>&1 & echo "ok"
