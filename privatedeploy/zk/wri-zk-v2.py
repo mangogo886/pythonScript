@@ -14,7 +14,7 @@ def sys_zk():
     while True:
         time.sleep(seconds)
         send_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())
-        con=MySQLdb.connect(host=ip,user=user,passwd=passwd,db=db,charset="utf8")
+        con=MySQLdb.connect(host=dbip,user=dbuser,passwd=dbpasswd,db=db,charset="utf8")
         cursor=con.cursor()
         sql="select count(*) from zk_node where mark=0;"
         cursor.execute(sql)
@@ -48,8 +48,8 @@ if __name__ == "__main__":
     port=9899
     seconds = random.randint(3, 5)
     zk_hosts = "172.17.1.24:2181"
-    ip = '172.17.1.24'
-    user = 'admin'
-    passwd = 'Qky2##2019'
+    dbip = '172.17.1.24'
+    dbuser = 'admin'
+    dbpasswd = 'Qky2##2019'
     db = 'qky_ops'
     sys_zk()
