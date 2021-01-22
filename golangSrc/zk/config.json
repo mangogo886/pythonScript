@@ -1,0 +1,4 @@
+{"zkaddress":"192.168.50.137:2181",
+  "databases":"root:123456@tcp(192.168.50.137:3306)/qky_ops?charset=utf8",
+  "listen":"0.0.0.0:9998"
+}
